@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Магія Писанки: Твій Іменний Оберіг</title>
+    <title>Магія Писанки: Твій Оберіг</title>
     <style>
         :root {
             --clay: #3e2723;
@@ -21,7 +21,6 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
         .wizard-container {
@@ -32,8 +31,6 @@
             border-radius: 30px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.1);
             text-align: center;
-            position: relative;
-            z-index: 2;
         }
 
         .step { display: none; animation: slideUp 0.4s ease-out; }
@@ -43,6 +40,19 @@
 
         h2 { color: var(--red); margin-bottom: 15px; }
         .description { color: #666; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5; }
+
+        input.name-input {
+            width: 80%;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-align: center;
+            outline: none;
+            transition: 0.3s;
+        }
+        input.name-input:focus { border-color: var(--gold); }
 
         .options-grid { display: grid; gap: 10px; margin-bottom: 20px; }
         
@@ -65,160 +75,168 @@
 
         .color-dot { width: 24px; height: 24px; border-radius: 8px; flex-shrink: 0; }
 
-        input[type="text"], select.option-select {
+        select.option-select {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             margin-bottom: 15px;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 2px solid #eee;
             font-size: 1rem;
-            box-sizing: border-box;
         }
 
         .nav-btns { display: flex; gap: 10px; margin-top: 20px; }
         button.primary { background: var(--red); color: white; border: none; padding: 15px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; flex: 1; }
         button.secondary { background: #eee; border: none; padding: 15px; border-radius: 12px; cursor: pointer; }
 
+        #final-name-title { font-size: 1.4rem; font-weight: bold; color: var(--red); margin-top: 20px; }
+
         #prediction-text {
             background: #fff9e6;
             padding: 20px;
             border-radius: 15px;
             border-left: 5px solid var(--gold);
-            margin-top: 20px;
+            margin-top: 15px;
             font-style: italic;
             line-height: 1.6;
             text-align: left;
         }
 
-        .bunny { width: 80px; position: fixed; bottom: 10px; right: 10px; opacity: 0.5; z-index: 1; }
-
-        svg { width: 100%; max-width: 280px; margin: 0 auto; display: block; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)); }
+        svg { width: 100%; max-width: 280px; margin: 0 auto; display: block; }
         canvas { display: none; }
     </style>
 </head>
 <body>
 
-<img src="https://i.postimg.cc/76ZN7Zyr/3.png" class="bunny" alt="Зайчик">
-
 <div class="wizard-container">
     <div class="step active" id="step1">
-        <div style="font-size: 4rem; margin-bottom: 20px;">🐣</div>
-        <h2>Як тебе звати, творцю?</h2>
-        <p class="description">Впиши своє ім'я, щоб оберіг знав, кого захищати.</p>
-        <input type="text" id="user-name" placeholder="Твоє ім'я..." maxlength="20">
-        <button class="primary" onclick="nextStep(2)">Розпочати магію</button>
+        <div style="font-size: 4rem; margin-bottom: 20px;">📜</div>
+        <h2>Як тебе звати?</h2>
+        <p class="description">Впиши своє ім'я, щоб наповнити оберіг особистою енергією.</p>
+        <input type="text" id="user-name" class="name-input" placeholder="Твоє ім'я...">
+        <button class="primary" onclick="nextStep(2)">Розпочати подорож</button>
     </div>
 
     <div class="step" id="step2">
-        <h2>Відчуття простору</h2>
+        <h2>Де твоє серце сьогодні?</h2>
         <div class="options-grid">
-            <button class="option-btn" onclick="selectOption('soil', '#1a1a1a', 'Глибока тиша чорнозему', this)"><span class="color-dot" style="background:#1a1a1a"></span> Міць рідної землі</button>
-            <button class="option-btn" onclick="selectOption('soil', '#b71c1c', 'Заграва степу', this)"><span class="color-dot" style="background:#b71c1c"></span> Вогонь та рух</button>
-            <button class="option-btn" onclick="selectOption('soil', '#fbc02d', 'Золоті Карпати', this)"><span class="color-dot" style="background:#fbc02d"></span> Сонце та вершини</button>
-            <button class="option-btn" onclick="selectOption('soil', '#0d47a1', 'Синє море', this)"><span class="color-dot" style="background:#0d47a1"></span> Спокій хвиль</button>
-            <button class="option-btn" onclick="selectOption('soil', '#2e7d32', 'Лісове Полісся', this)"><span class="color-dot" style="background:#2e7d32"></span> Поклик природи</button>
-            <button class="option-btn" onclick="selectOption('soil', '#ffffff', 'Ранкова роса', this)"><span class="color-dot" style="background:#ffffff; border:1px solid #ddd"></span> Чистота та світло</button>
+            <button class="option-btn" onclick="selectOption('soil', '#1a1a1a', 'Глибока тиша чорнозему', this)"><span class="color-dot" style="background:#1a1a1a"></span> Відчуваю міць рідної землі</button>
+            <button class="option-btn" onclick="selectOption('soil', '#b71c1c', 'Заграва над вільним степом', this)"><span class="color-dot" style="background:#b71c1c"></span> Надихаюся вогнем і рухом</button>
+            <button class="option-btn" onclick="selectOption('soil', '#fbc02d', 'Золоті схили Карпат', this)"><span class="color-dot" style="background:#fbc02d"></span> Тягнуся до сонця і вершин</button>
+            <button class="option-btn" onclick="selectOption('soil', '#0d47a1', 'Глибина Чорного моря', this)"><span class="color-dot" style="background:#0d47a1"></span> Шукаю спокій у водній стихії</button>
+            <button class="option-btn" onclick="selectOption('soil', '#2e7d32', 'Таємничі хащі Полісся', this)"><span class="color-dot" style="background:#2e7d32"></span> Відчуваю поклик лісу і життя</button>
+            <button class="option-btn" onclick="selectOption('soil', '#ffffff', 'Чисте світло ранкової роси', this)"><span class="color-dot" style="background:#ffffff; border:1px solid #ddd"></span> Прагну ясності та оновлення</button>
         </div>
-        <div class="nav-btns"><button class="secondary" onclick="nextStep(1)">←</button><button class="primary" onclick="nextStep(3)">Далі</button></div>
+        <div class="nav-btns">
+            <button class="secondary" onclick="nextStep(1)">←</button>
+            <button class="primary" onclick="nextStep(3)">Далі</button>
+        </div>
     </div>
 
     <div class="step" id="step3">
-        <h2>Обери свій код</h2>
-        <label>Небо (Духовне):</label>
-        <select id="sel-sky" class="option-select">
-            <option value="sky-sun">Восьмикутна Рожа (Енергія)</option>
-            <option value="sky-star">Зоря (Новий шлях)</option>
-            <option value="sky-birds">Птахи (Звістка)</option>
-            <option value="sky-cloud">Грабельки (Дощ)</option>
-            <option value="sky-swirl">Свастя (Рух)</option>
-            <option value="sky-trident">Тризуб (Воля)</option>
-            <option value="sky-bee">Бджола (Душа)</option>
-        </select>
-        
-        <label>Земля (Буденне):</label>
-        <select id="sel-earth" class="option-select">
-            <option value="earth-deer">Олень (Гідність)</option>
-            <option value="earth-oak">Дуб (Міцність)</option>
-            <option value="earth-bereginya">Берегиня (Захист)</option>
-            <option value="earth-horse">Кінь (Швидкість)</option>
-            <option value="earth-tree">Дерево (Рід)</option>
-            <option value="earth-wheat">Пшениця (Статок)</option>
-            <option value="earth-flower">Квітка (Краса)</option>
-        </select>
-
-        <label>Вода (Внутрішнє):</label>
-        <select id="sel-water" class="option-select">
-            <option value="water-waves">Безконечник (Життя)</option>
-            <option value="water-fish">Риба (Здоров'я)</option>
-            <option value="water-duck">Качка (Родина)</option>
-            <option value="water-rhomb">Ромб (Врожай)</option>
-            <option value="water-well">Криниця (Мудрість)</option>
-            <option value="water-trig">Тригвер (Час)</option>
-            <option value="water-rake">Грабельки (Очищення)</option>
-        </select>
-
-        <div class="nav-btns"><button class="secondary" onclick="nextStep(2)">←</button><button class="primary" onclick="finishPysanka()">Створити оберіг</button></div>
+        <h2>Три яруси буття</h2>
+        <p class="description">Писанка буде поділена на Небо, Землю та Воду для повної гармонії.</p>
+        <div class="options-grid">
+            <button class="option-btn selected">Світове дерево (Три рівні)</button>
+        </div>
+        <div class="nav-btns">
+            <button class="secondary" onclick="nextStep(2)">←</button>
+            <button class="primary" onclick="nextStep(4)">Наповнити символами</button>
+        </div>
     </div>
 
     <div class="step" id="step4">
+        <h2>Обери свої символи</h2>
+        
+        <label>Небо:</label>
+        <select id="sel-sky" class="option-select">
+            <option value="sky-sun">Восьмикутна Рожа (Енергія сонця)</option>
+            <option value="sky-star">Ранкова Зоря (Новий шлях)</option>
+            <option value="sky-birds">Птахи (Добра звістка)</option>
+            <option value="sky-cloud">Грабельки (Благословенний дощ)</option>
+            <option value="sky-swirl">Свастя (Вічний колообіг)</option>
+            <option value="sky-trident">Тризуб (Сила духу)</option>
+            <option value="sky-bee">Бджола (Працьовитість душі)</option>
+        </select>
+        
+        <label>Земля:</label>
+        <select id="sel-earth" class="option-select">
+            <option value="earth-deer">Олень (Успіх та гідність)</option>
+            <option value="earth-oak">Дуб (Незламність роду)</option>
+            <option value="earth-bereginya">Берегиня (Захист дому)</option>
+            <option value="earth-horse">Кінь (Швидкість і витривалість)</option>
+            <option value="earth-tree">Дерево життя (Родинний зв'язок)</option>
+            <option value="earth-wheat">Сніп пшениці (Достаток)</option>
+            <option value="earth-flower">Квітка (Розквіт талантів)</option>
+        </select>
+
+        <label>Вода:</label>
+        <select id="sel-water" class="option-select">
+            <option value="water-waves">Безконечник (Вічність життя)</option>
+            <option value="water-fish">Риба (Чистота та здоров'я)</option>
+            <option value="water-duck">Качка (Сімейне щастя)</option>
+            <option value="water-rhomb">Засіяний ромб (Плодоносність)</option>
+            <option value="water-well">Криниця (Мудрість предків)</option>
+            <option value="water-trig">Тригвер (Циклічність часу)</option>
+            <option value="water-rake">Грабельки (Очищення помислів)</option>
+        </select>
+
+        <div class="nav-btns">
+            <button class="secondary" onclick="nextStep(3)">←</button>
+            <button class="primary" onclick="finishPysanka()">Проявити оберіг</button>
+        </div>
+    </div>
+
+    <div class="step" id="step5">
         <div id="final-display"></div>
+        <div id="final-name-title"></div>
         <div id="prediction-text"></div>
         <div class="nav-btns">
-            <button class="primary" onclick="saveAsPNG()">Зберегти PNG</button>
-            <button class="secondary" onclick="restart()">🔄 Спочатку</button>
+            <button class="primary" onclick="saveAsPNG()">Зберегти оберіг PNG</button>
+            <button class="secondary" onclick="restart()">🔄</button>
         </div>
     </div>
 </div>
 
 <div style="display:none">
     <svg id="master-svg" viewBox="0 0 200 260">
-        <path id="egg-base" d="M100,10 C150,10 190,80 190,160 C190,230 150,250 100,250 C50,250 10,230 10,160 C10,80 50,10 100,10 Z" fill="#ffffff"/>
-        <g stroke="white" stroke-width="1.2" fill="none" opacity="0.4"><path d="M15,95 Q100,85 185,95 M15,165 Q100,155 185,165"/></g>
+        <path id="egg-base" d="M100,10 C150,10 190,80 190,160 C190,230 150,250 100,250 C50,250 10,230 10,160 C10,80 50,10 100,10 Z" fill="#ffffff" stroke="#888888" stroke-width="1.5"/>
+        <g id="deco-lines" stroke="rgba(0,0,0,0.1)" stroke-width="1.2" fill="none">
+            <path d="M15,95 Q100,85 185,95 M15,165 Q100,155 185,165"/>
+        </g>
         <g id="cont-sky" transform="translate(100, 55)"></g>
         <g id="cont-earth" transform="translate(100, 130)"></g>
         <g id="cont-water" transform="translate(100, 205)"></g>
-        <text id="svg-name" x="100" y="275" font-family="Arial" font-size="12" fill="#3e2723" text-anchor="middle"></text>
         
         <defs>
-            <g id="sky-sun" stroke="white" fill="none" stroke-width="2"><circle r="12"/><path d="M-20,0 H20 M0,-20 V20 M-14,-14 L14,14 M-14,14 L14,-14"/></g>
-            <g id="sky-star" fill="white"><path d="M0,-25 L6,-6 L25,0 L6,6 L0,25 L-6,6 L-25,0 L-6,-6 Z"/></g>
-            <g id="sky-birds" stroke="white" fill="none" stroke-width="2"><path d="M-20,0 Q-10,-10 0,0 Q10,-10 20,0 M0,0 V10"/></g>
-            <g id="sky-cloud" stroke="white" stroke-width="2"><path d="M-20,0 H20 M-15,0 V10 M0,0 V10 M15,0 V10"/></g>
-            <g id="sky-swirl" stroke="white" fill="none" stroke-width="2.5"><path d="M-15,-15 L15,15 M-15,15 L15,-15 M0,-20 V20 M-20,0 H20"/></g>
-            <g id="sky-trident" stroke="white" fill="none" stroke-width="2"><path d="M-15,-10 V10 Q0,20 15,10 V-10 M0,-15 V15"/></g>
-            <g id="sky-bee" stroke="white" fill="white"><circle r="3"/><ellipse cx="7" cy="0" rx="6" ry="3" fill="none"/><ellipse cx="-7" cy="0" rx="6" ry="3" fill="none"/></g>
-
-            <g id="earth-deer" stroke="white" fill="none" stroke-width="2.5"><path d="M-20,10 H10 L18,-15 M10,10 V30 M-12,10 V30 M18,-15 L12,-25 M18,-15 L24,-25"/></g>
-            <g id="earth-oak" fill="white"><path d="M0,0 Q15,-10 0,-30 Q-15,-10 0,0 M0,5 Q15,15 0,35 Q-15,15 0,5"/></g>
-            <g id="earth-bereginya" stroke="white" fill="none" stroke-width="2"><circle cx="0" cy="-30" r="6" fill="white"/><path d="M-25,0 L0,-12 L25,0 M0,-12 V15 M-15,15 L0,8 L15,15"/></g>
-            <g id="earth-horse" stroke="white" fill="none" stroke-width="2.5"><path d="M-20,20 H15 L25,0 M-10,20 V35 M10,20 V35 M25,0 L20,-15"/></g>
-            <g id="earth-tree" stroke="white" fill="none" stroke-width="2"><path d="M0,30 V-20 M-20,0 L0,-10 L20,0 M-15,-15 L0,-25 L15,-15"/></g>
-            <g id="earth-wheat" stroke="white" stroke-width="2"><path d="M0,30 V-10 M0,-10 L-8,-18 M0,-5 L-8,-13 M0,-10 L8,-18 M0,-5 L8,-13"/></g>
-            <g id="earth-flower" fill="white"><circle r="5"/><circle cx="12" r="4"/><circle cx="-12" r="4"/><circle cy="12" r="4"/><circle cy="-12" r="4"/></g>
-
-            <g id="water-waves" stroke="#81d4fa" fill="none" stroke-width="3"><path d="M-40,0 Q-20,-15 0,0 T40,0"/></g>
-            <g id="water-fish" stroke="white" fill="none" stroke-width="2"><path d="M-30,0 C-10,-15 10,-15 30,0 C10,15 -10,15 -30,0 Z M30,0 L45,-8 V8 Z"/></g>
-            <g id="water-duck" fill="white"><path d="M-20,0 Q0,-25 25,0 L30,12 H-30 Z M18,-8 Q28,-18 38,-8 L32,0 Z"/></g>
-            <g id="water-rhomb" stroke="white" fill="none" stroke-width="2"><path d="M0,-20 L20,0 L0,20 L-20,0 Z"/><circle r="2" fill="white"/></g>
-            <g id="water-well" stroke="white" stroke-width="2"><rect x="-15" y="-15" width="30" height="30" fill="none"/><line x1="-15" y1="-15" x2="15" y2="15"/><line x1="15" y1="-15" x2="-15" y2="15"/></g>
-            <g id="water-trig" fill="white"><path d="M0,-15 L13,7 L-13,7 Z"/><circle r="3" cy="-5" fill="var(--red)"/></g>
-            <g id="water-rake" stroke="white" stroke-width="2"><line x1="-30" y1="0" x2="30" y2="0"/><path d="M-20,0 V12 M0,0 V12 M20,0 V12"/></g>
+            <g id="sky-sun"><circle r="12"/><path d="M-20,0 H20 M0,-20 V20 M-14,-14 L14,14 M-14,14 L14,-14"/></g>
+            <g id="sky-star"><path d="M0,-22 L6,-6 L22,0 L6,6 L0,22 L-6,6 L-22,0 L-6,-6 Z"/></g>
+            <g id="sky-birds"><path d="M-20,0 Q-10,-10 0,0 Q10,-10 20,0 M0,0 V10"/></g>
+            <g id="sky-cloud"><path d="M-15,0 V10 M0,0 V10 M15,0 V10 M-20,0 H20"/></g>
+            <g id="sky-swirl"><path d="M-15,-15 L15,15 M15,-15 L-15,15 M-15,-15 H0 M15,15 H0 M15,-15 V0 M-15,15 V0"/></g>
+            <g id="sky-trident"><path d="M0,15 V-15 M-10,-5 V-10 Q-10,-20 0,-20 Q10,-20 10,-10 V-5"/></g>
+            <g id="sky-bee"><circle r="5"/><path d="M-10,-5 Q-15,-15 -5,-10 M10,-5 Q15,-15 5,-10 M-5,5 L5,5"/></g>
+            <g id="earth-deer"><path d="M-15,10 H5 L12,-15 M5,10 V25 M-10,10 V25 M12,-15 L7,-22 M12,-15 L17,-22"/></g>
+            <g id="earth-oak"><path d="M0,0 Q15,-10 0,-25 Q-15,-10 0,0 M0,5 Q15,15 0,30 Q-15,15 0,5"/></g>
+            <g id="earth-bereginya"><circle cx="0" cy="-20" r="5"/><path d="M-20,0 L0,-10 L20,0 M0,-10 V15 M-15,15 L0,8 L15,15"/></g>
+            <g id="earth-horse"><path d="M-15,5 H10 L20,-10 M-10,5 V20 M5,5 V20 M15,-5 L25,-5"/></g>
+            <g id="earth-tree"><path d="M0,20 V-20 M0,-5 L15,-15 M0,-5 L-15,-15 M0,10 L12,0 M0,10 L-12,0"/></g>
+            <g id="earth-wheat"><path d="M0,20 V-15 M0,-10 L5,-15 M0,-10 L-5,-15 M0,-2 L5,-7 M0,-2 L-5,-7"/></g>
+            <g id="earth-flower"><circle r="4"/><path d="M0,-12 V12 M-12,0 H12 M-8,-8 L8,8 M-8,8 L8,-8"/></g>
+            <g id="water-waves"><path d="M-40,0 Q-20,-20 0,0 T40,0"/></g>
+            <g id="water-fish"><path d="M-25,0 C-10,-15 10,-15 25,0 C10,15 -10,15 -25,0 Z M25,0 L35,-8 V8 Z"/></g>
+            <g id="water-duck"><path d="M-15,0 H15 L20,-10 Q10,-15 5,-10 L-10,0 Z M-5,0 V10 H5 V0"/></g>
+            <g id="water-rhomb"><path d="M0,-18 L18,0 L0,18 L-18,0 Z M-5,0 A2,2 0 1 0 5,0 A2,2 0 1 0 -5,0"/></g>
+            <g id="water-well"><path d="M-15,-15 H15 V15 H-15 Z M-15,-15 L15,15 M-15,15 L15,-15"/></g>
+            <g id="water-trig"><path d="M0,-15 L13,7 L-13,7 Z M0,0 L0,-15 M0,0 L13,7 M0,0 L-13,7"/></g>
+            <g id="water-rake"><path d="M-20,0 H20 M-15,0 V12 M-5,0 V12 M5,0 V12 M15,0 V12"/></g>
         </defs>
     </svg>
 </div>
 
-<canvas id="export-canvas" width="800" height="1100"></canvas>
+<canvas id="export-canvas" width="800" height="1200"></canvas>
 
 <script>
-    let selections = { soil: '#1a1a1a', soilName: 'Земля' };
-    const regionalPhrases = [
-        "Ти як волинська писанка — несеш у собі міць прадавніх лісів.",
-        "Твій дух — це вільний степ Слобожанщини та сила відкритого неба.",
-        "У твоєму коді відчувається тепло Карпатських гір та сонячна енергія.",
-        "Твоя душа глибока, як Чорне море, і спокійна, як вечірній прибій.",
-        "Ти — голос Полісся, таємничий та сповнений життєвої сили.",
-        "Твоє світло чисте, як київські світанки над Дніпром."
-    ];
+    let selections = { soil: '#1a1a1a', soilName: 'Чорнозем' };
 
     function nextStep(n) {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
@@ -233,57 +251,92 @@
     }
 
     function finishPysanka() {
-        const name = document.getElementById('user-name').value || "Творець";
-        const svg = document.getElementById('master-svg').cloneNode(true);
-        svg.id = "final-svg";
-        svg.querySelector('#egg-base').setAttribute('fill', selections['soil']);
-        svg.querySelector('#svg-name').textContent = "Оберіг для: " + name;
+        const name = document.getElementById('user-name').value || "Мій Оберіг";
+        document.getElementById('final-name-title').innerText = name;
 
-        const zones = { 
-            'cont-sky': document.getElementById('sel-sky').value, 
-            'cont-earth': document.getElementById('sel-earth').value, 
-            'cont-water': document.getElementById('sel-water').value 
-        };
+        const master = document.getElementById('master-svg');
+        const svg = master.cloneNode(true);
+        svg.id = "final-svg";
+        
+        const bgColor = selections['soil'];
+        svg.querySelector('#egg-base').setAttribute('fill', bgColor);
+        
+        // Колір ліній
+        const isWhiteBg = bgColor.toLowerCase() === '#ffffff';
+        const strokeColor = isWhiteBg ? '#3e2723' : '#ffffff';
+        svg.querySelector('#deco-lines').setAttribute('stroke', isWhiteBg ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.3)');
+
+        const sky = document.getElementById('sel-sky');
+        const earth = document.getElementById('sel-earth');
+        const water = document.getElementById('sel-water');
+        const zones = { 'cont-sky': sky.value, 'cont-earth': earth.value, 'cont-water': water.value };
 
         for (const [contId, symId] of Object.entries(zones)) {
             const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
             use.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#" + symId);
-            svg.getElementById(contId).appendChild(use);
+            use.setAttribute('stroke', strokeColor);
+            use.setAttribute('fill', 'none');
+            use.setAttribute('stroke-width', '2');
+            const container = svg.getElementById(contId);
+            if(container) container.appendChild(use);
         }
 
         document.getElementById('final-display').innerHTML = '';
         document.getElementById('final-display').appendChild(svg);
 
-        // Поєднання з першою ідеєю (Випадкова фраза + логіка)
-        const soilIndex = ['#1a1a1a', '#b71c1c', '#fbc02d', '#0d47a1', '#2e7d32', '#ffffff'].indexOf(selections.soil);
-        const regionalBase = regionalPhrases[soilIndex] || regionalPhrases[0];
+        const pred = `Твій оберіг, наповнений як ${selections.soilName}, несе в собі гармонію. Обраний тобою ${sky.selectedOptions[0].text} у небі освітлює шлях твоїм мріям. ${earth.selectedOptions[0].text} на землі дарує стійкість твоїм справам, а ${water.selectedOptions[0].text} у воді береже твій внутрішній світ. Нехай цей код працює на добро!`;
+        document.getElementById('prediction-text').innerText = pred;
         
-        const pred = `<b>${name}</b>, твоє таїнство завершено! <br><br>
-        ${regionalBase} <br>
-        Обраний тобою <b>${document.getElementById('sel-sky').selectedOptions[0].text}</b> дарує натхнення мріям. 
-        <b>${document.getElementById('sel-earth').selectedOptions[0].text}</b> захищає твій дім, 
-        а <b>${document.getElementById('sel-water').selectedOptions[0].text}</b> наповнює серце мудрістю.`;
-        
-        document.getElementById('prediction-text').innerHTML = pred;
-        nextStep(4);
+        nextStep(5);
     }
 
     function saveAsPNG() {
         const svg = document.getElementById('final-svg');
         const canvas = document.getElementById('export-canvas');
         const ctx = canvas.getContext('2d');
+        const name = document.getElementById('final-name-title').innerText;
+        const text = document.getElementById('prediction-text').innerText;
+        
         const xml = new XMLSerializer().serializeToString(svg);
         const img = new Image();
+        
         img.onload = function() {
             ctx.fillStyle = "#fcfaf5";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 100, 50, 600, 900);
+            
+            ctx.drawImage(img, 200, 50, 400, 520);
+            
+            // Малюємо ім'я (Велике і по центру)
+            ctx.fillStyle = "#d32f2f";
+            ctx.font = "bold 40px 'Segoe UI'";
+            ctx.textAlign = "center";
+            ctx.fillText(name, canvas.width / 2, 650);
+            
+            // Малюємо опис
+            ctx.fillStyle = "#3e2723";
+            ctx.font = "italic 22px 'Segoe UI'";
+            wrapText(ctx, text, canvas.width / 2, 720, 700, 32);
+
             const link = document.createElement('a');
-            link.download = 'pysanka_oberig.png';
-            link.href = canvas.toDataURL();
+            link.download = `pysanka_${name}.png`;
+            link.href = canvas.toDataURL('image/png');
             link.click();
         };
         img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(xml)));
+    }
+
+    function wrapText(context, text, x, y, maxWidth, lineHeight) {
+        const words = text.split(' ');
+        let line = '';
+        for(let n = 0; n < words.length; n++) {
+            let testLine = line + words[n] + ' ';
+            if (context.measureText(testLine).width > maxWidth && n > 0) {
+                context.fillText(line, x, y);
+                line = words[n] + ' ';
+                y += lineHeight;
+            } else { line = testLine; }
+        }
+        context.fillText(line, x, y);
     }
 
     function restart() {
@@ -291,5 +344,6 @@
         nextStep(1);
     }
 </script>
+
 </body>
 </html>
