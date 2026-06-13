@@ -2,99 +2,92 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Моніторинг паралелі 6-х класів</title>
+    <title>Моніторинг результатів: 6 класи</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #f0f8ff; padding: 20px; color: #333; }
         .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
         h1 { text-align: center; color: #3498db; margin-bottom: 30px; }
-        .main-layout { display: flex; gap: 30px; }
-        .sidebar { display: flex; flex-direction: column; gap: 10px; width: 200px; }
-        .content { flex-grow: 1; }
-        .btn { padding: 15px; cursor: pointer; border: none; border-radius: 50px; color: white; font-weight: bold; transition: 0.3s; }
-        .btn-all { background-color: #2c3e50; border: 2px solid #34495e; }
         
+        .main-layout { display: flex; gap: 30px; }
+        .sidebar { display: flex; flex-direction: column; gap: 15px; width: 200px; }
+        .content { flex-grow: 1; }
+
+        .btn { padding: 15px; cursor: pointer; border: none; border-radius: 50px; color: white; font-weight: bold; font-size: 1.1em; transition: 0.3s; }
+        .btn:hover { transform: scale(1.05); }
+        
+        /* Стилі для графіку */
         .chart-wrapper { display: flex; justify-content: center; align-items: flex-end; gap: 20px; height: 250px; margin-top: 40px; border-bottom: 2px solid #333; padding-bottom: 5px; }
         .bar-group { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .bar { width: 60px; }
+        .bar { width: 60px; transition: height 0.5s; }
+        .label { font-weight: bold; font-size: 14px; }
+        
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
         th { background-color: #f8f9fa; }
+        .total-info { font-size: 1.2em; font-weight: bold; margin-bottom: 10px; color: #2c3e50; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>МОНІТОРИНГ РЕЗУЛЬТАТІВ: 6 КЛАСИ</h1>
+    <h1>МОНІТОРИНГ РЕЗУЛЬТАТІВ: 6 КЛАСИ. ГЕОГРАФІЯ</h1>
     <div class="main-layout">
         <div class="sidebar" id="btnGroup"></div>
         <div class="content" id="result">
-            <p>Оберіть клас або "Уся паралель" для перегляду зведених даних.</p>
+            <p>Оберіть клас, щоб переглянути детальний звіт.</p>
         </div>
     </div>
 </div>
 
 <script>
     const data = {
-        '6-А': { total: 20, p: 0, s: 0, d: 11, v: 9 },
-        '6-Б': { total: 24, p: 0, s: 0, d: 14, v: 10 },
-        '6-В': { total: 21, p: 0, s: 3, d: 11, v: 7 },
-        '6-Г': { total: 20, p: 2, s: 6, d: 9, v: 3 },
-        '6-Д': { total: 17, p: 0, s: 2, d: 11, v: 4 }
+        '6-А': { color: '#bc4de0', total: 20, p: 0, s: 0, d: 11, v: 9 },
+        '6-Б': { color: '#2ecc71', total: 24, p: 0, s: 0, d: 14, v: 10 },
+        '6-В': { color: '#3498db', total: 21, p: 0, s: 3, d: 11, v: 7 },
+        '6-Г': { color: '#e67e22', total: 20, p: 2, s: 6, d: 9, v: 3 },
+        '6-Д': { color: '#f1c40f', total: 17, p: 0, s: 2, d: 11, v: 4 }
     };
 
     function showData(cls) {
-        let stats;
-        let title = `Результати ${cls}`;
-
-        if (cls === 'Уся паралель') {
-            stats = Object.values(data).reduce((acc, curr) => ({
-                total: acc.total + curr.total,
-                p: acc.p + curr.p, s: acc.s + curr.s,
-                d: acc.d + curr.d, v: acc.v + curr.v
-            }), { total: 0, p: 0, s: 0, d: 0, v: 0 });
-        } else {
-            stats = data[cls];
-        }
-
-        const qPercent = (((stats.d + stats.v) / stats.total) * 100).toFixed(0);
+        const d = data[cls];
+        const qPercent = (((d.d + d.v) / d.total) * 100).toFixed(0);
         
         document.getElementById('result').innerHTML = `
-            <h2>${title}</h2>
-            <p>Всього учнів: <strong>${stats.total}</strong></p>
+            <h2>Результати ${cls}</h2>
+            <div class="total-info">Всього учнів у класі: ${d.total}</div>
             <table>
                 <tr><th>Початковий</th><th>Середній</th><th>Достатній</th><th>Високий</th><th>Якість знань</th></tr>
-                <tr><td>${stats.p}</td><td>${stats.s}</td><td>${stats.d}</td><td>${stats.v}</td><td><strong>${qPercent}%</strong></td></tr>
+                <tr><td>${d.p}</td><td>${d.s}</td><td>${d.d}</td><td>${d.v}</td><td><strong>${qPercent}%</strong></td></tr>
             </table>
             <div class="chart-wrapper">
-                ${renderBar(stats.p, 'Початковий', '#e74c3c')}
-                ${renderBar(stats.s, 'Середній', '#e67e22')}
-                ${renderBar(stats.d, 'Достатній', '#f1c40f')}
-                ${renderBar(stats.v, 'Високий', '#2ecc71')}
+                ${renderBar(d.p, 'Початковий', '#e74c3c')}
+                ${renderBar(d.s, 'Середній', '#e67e22')}
+                ${renderBar(d.d, 'Достатній', '#f1c40f')}
+                ${renderBar(d.v, 'Високий', '#2ecc71')}
             </div>
         `;
     }
 
     function renderBar(val, label, color) {
-        return `<div class="bar-group"><span class="label">${val}</span><div class="bar" style="height: ${val * 3}px; background-color: ${color}"></div><small>${label}</small></div>`;
+        return `
+            <div class="bar-group">
+                <span class="label">${val > 0 ? val : ''}</span>
+                <div class="bar" style="height: ${val * 15}px; background-color: ${color}"></div>
+                <small>${label}</small>
+            </div>
+        `;
     }
 
     const btnGroup = document.getElementById('btnGroup');
-    // Додаємо кнопки класів
     Object.keys(data).forEach(cls => {
         const btn = document.createElement('button');
         btn.className = 'btn';
-        btn.style.backgroundColor = '#3498db';
+        btn.style.backgroundColor = data[cls].color;
         btn.innerText = cls;
         btn.onclick = () => showData(cls);
         btnGroup.appendChild(btn);
     });
-
-    // Додаємо кнопку "Уся паралель"
-    const allBtn = document.createElement('button');
-    allBtn.className = 'btn btn-all';
-    allBtn.innerText = 'Уся паралель';
-    allBtn.onclick = () => showData('Уся паралель');
-    btnGroup.appendChild(allBtn);
 </script>
+
 </body>
 </html>
