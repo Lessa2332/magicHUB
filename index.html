@@ -2,57 +2,59 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Моніторинг навчальних досягнень (Додаток 6)</title>
+    <title>Моніторинг результатів 6 класів</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa, #c3cfe2); padding: 20px; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; text-align: center; }
-        .btn-group { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
-        button { padding: 12px 25px; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; transition: transform 0.2s, background 0.3s; color: white; }
-        .btn-6a { background: #e74c3c; } .btn-6b { background: #3498db; } .btn-6v { background: #27ae60; } .btn-6g { background: #f1c40f; color: #333; }
-        button:hover { transform: scale(1.05); }
-        .content-box { padding: 20px; border-radius: 15px; background: #f9f9f9; border: 2px solid #ddd; min-height: 150px; }
-        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .data-table th, .data-table td { border: 1px solid #ddd; padding: 10px; text-align: center; }
-        .data-table th { background-color: #34495e; color: white; }
+        body { font-family: sans-serif; background-color: #f4f7f6; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; }
+        .btn-group { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        button { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; background: #3498db; color: white; transition: 0.3s; }
+        button:hover { background: #2980b9; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        th { background-color: #3498db; color: white; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📊 Моніторинг результатів (Додаток 6)</h1>
-    <div class="btn-group">
-        <button class="btn-6a" onclick="showClass('6-А')">6-А клас</button>
-        <button class="btn-6b" onclick="showClass('6-Б')">6-Б клас</button>
-        <button class="btn-6v" onclick="showClass('6-В')">6-В клас</button>
-        <button class="btn-6g" onclick="showClass('6-Г')">6-Г клас</button>
-    </div>
-    
-    <div id="display" class="content-box">
-        <p style="text-align:center; color:#7f8c8d;">Оберіть клас, щоб переглянути результати моніторингу.</p>
-    </div>
+    <h1>Інтерактивний моніторинг географії (2025-2026)</h1>
+    <div class="btn-group" id="btnGroup"></div>
+    <div id="result"></div>
 </div>
 
 <script>
     const data = {
-        '6-А': { гр1: 'Високий', гр2: 'Достатній', гр3: 'Високий' },
-        '6-Б': { гр1: 'Достатній', гр2: 'Високий', гр3: 'Середній' },
-        '6-В': { гр1: 'Високий', гр2: 'Високий', гр3: 'Достатній' },
-        '6-Г': { гр1: 'Середній', гр2: 'Достатній', гр3: 'Високий' }
+        '6-А': { total: 20, p: 0, s: 0, d: 11, v: 9, q: 20 },
+        '6-Б': { total: 24, p: 0, s: 0, d: 14, v: 10, q: 24 },
+        '6-В': { total: 21, p: 0, s: 3, d: 11, v: 7, q: 18 },
+        '6-Г': { total: 20, p: 2, s: 6, d: 9, v: 3, q: 12 },
+        '6-Д': { total: 17, p: 0, s: 2, d: 11, v: 4, q: 15 }
     };
 
-    function showClass(className) {
-        const d = data[className];
-        document.getElementById('display').innerHTML = `
-            <h3>Результати моніторингу: ${className}</h3>
-            <table class="data-table">
-                <tr><th>Група результатів</th><th>Рівень засвоєння</th></tr>
-                <tr><td>ГР 1 (Дослідницька)</td><td>${d.гр1}</td></tr>
-                <tr><td>ГР 2 (Аналітична)</td><td>${d.гр2}</td></tr>
-                <tr><td>ГР 3 (Практична)</td><td>${d.гр3}</td></tr>
+    function showData(cls) {
+        const d = data[cls];
+        const qPercent = ((d.q / d.total) * 100).toFixed(0);
+        document.getElementById('result').innerHTML = `
+            <h2>Результати ${cls}</h2>
+            <table>
+                <tr><th>Рівень</th><th>Кількість</th></tr>
+                <tr><td>Початковий</td><td>${d.p}</td></tr>
+                <tr><td>Середній</td><td>${d.s}</td></tr>
+                <tr><td>Достатній</td><td>${d.d}</td></tr>
+                <tr><td>Високий</td><td>${d.v}</td></tr>
+                <tr><td><strong>Якість знань</strong></td><td><strong>${qPercent}%</strong></td></tr>
             </table>
         `;
     }
+
+    const btnGroup = document.getElementById('btnGroup');
+    Object.keys(data).forEach(cls => {
+        const btn = document.createElement('button');
+        btn.innerText = cls;
+        btn.onclick = () => showData(cls);
+        btnGroup.appendChild(btn);
+    });
 </script>
 
 </body>
